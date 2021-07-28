@@ -12,10 +12,9 @@ class HomePage extends Component {
   
   async updateArticles() {
     try {
-      this.setState({
-        filterText: this.props.filterText
-      })
-      const json = await ArticlesAPI.fetchArticles(this.state.filterText);
+
+      console.log('searchtext is: ', this.state.searchText)
+      const json = await ArticlesAPI.fetchArticles(this.state.searchText);
       this.setState({
         articles:json
       })
@@ -32,7 +31,13 @@ class HomePage extends Component {
   
   // updates based on search text
   componentDidUpdate(prevProps, prevState) {
-    if(this.props.filterText !== this.state.filterText) {
+    console.log('prevprops differ')
+    if (prevProps.filterText !== this.props.filterText) {
+      this.setState({
+        searchText: (this.props.filterText)
+      })
+    }
+    if(prevState.searchText !== this.state.searchText) {
       this.updateArticles()
     }
   }

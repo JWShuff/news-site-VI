@@ -5,8 +5,8 @@ const SearchBar = (props) => {
 
   const handleSearch = (evt) => {
     evt.preventDefault()
-    console.log(evt.target.input.value)
     props.handleFilterText(evt.target.input.value)
+    evt.target.input.value= ''
   }
 
   return (

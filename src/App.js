@@ -14,14 +14,7 @@ class App extends Component {
     filterText: ''
   }
 
-  componentDidUpdate(prevProps) {
-    if(this.props) {
-      return
-    }
-  }
-
-  render() {
-    
+  render() { 
     const renderHomePage = (routerProps) => {
       return (
         <HomePage {...routerProps} filterText={this.state.filterText} />
@@ -38,22 +31,23 @@ class App extends Component {
     return (
       <div>
         <Router>
-          <AppNav 
-            handleNavClick={(clickedItem) => console.log(clickedItem)}
-            handleFilterText={(newFilterText) => {
-              this.setState({
-                filterText:newFilterText
-              })
-              console.log(this.state.filterText)
-            }} 
-          />
-          <div>
-            <Route exact path="/" render={renderHomePage} filterText={this.state.filterText}/>
-            <Route exact path='/sections/:sectionID' render={renderSectionPage} filterText={this.state.filterText} />
-            <Route exact path="/articles/:articleID" component={ArticlePage} />
-            <Route exact path='/add-article' component={AddArticlePage} />
-            <Route exact path='/login' component={LoginPage} />
-          </div>
+          <UserContext.Provider value={{ use: this.state.user }}>
+            <AppNav 
+              handleNavClick={(clickedItem) => console.log(clickedItem)}
+              handleFilterText={(newFilterText) => {
+                this.setState({
+                  filterText:newFilterText
+                })
+              }} 
+            />
+            <div>
+              <Route exact path="/" render={renderHomePage} filterText={this.state.filterText}/>
+              <Route exact path='/sections/:sectionID' render={renderSectionPage} filterText={this.state.filterText} />
+              <Route exact path="/articles/:articleID" component={ArticlePage} />
+              <Route exact path='/add-article' component={AddArticlePage} />
+              <Route exact path='/login' component={LoginPage} />
+            </div>
+          </UserContext.Provider>
         </Router>
       </div>
     );

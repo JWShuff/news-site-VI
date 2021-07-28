@@ -6,17 +6,12 @@ afterEach(() => {
   fetchMock.restore();
 })
 
-it('logs in', () => {
-  const request = fetchMock.post('http://localhost:3001/api/users/login?include=user', {success: true});
+it('logs in', async () => {
   const userObject = {email: 'john@doe.com', password: 'opensesame'};
-  return UsersAPI.login(userObject)
-    .then((json) => {
-      console.log(json)
-      const requestBody = request._calls[0][1].body;
-      expect(requestBody).toEqual(JSON.stringify(userObject));
-      expect(json.ok).toEqual(true);
-    })
-    .catch((err) => {
-      throw new Error('Call failed');
-    });
+  try {
+    let user = await UsersAPI.login(userObject)
+    expect(user.ttl).toEqual(1209600);
+      } catch(err) {
+        throw new Error('Call failed');
+      };
 });

@@ -1,5 +1,6 @@
 
 import ArticlesAPI from './ArticlesAPI'
+import UsersAPI from './UsersAPI'
 import fetchMock from 'fetch-mock'
 require('isomorphic-fetch')
 
@@ -43,23 +44,22 @@ it('calls ArticlesAPI.fetchArticlesBySection(\'opinion\')', (done) => {
     })
 })
 
-it('submits an article by calling addArticle()', () => {
+it('submits an article by calling addArticle()', async () => {
+  const userObject = {email: 'john@doe.com', password: 'opensesame'};
   const articleObject = {
     title: 'test',
     byline: 'title',
     abstract: 'adsf'
   };
-  return ArticlesAPI.addArticle(articleObject, 'token')
-    .then((json) => {
-      console.log(json)
-      const requestBody = request._calls[0][1].body;
-      const headers = request._calls[0][1].headers;
-      expect(headers.Authorization).toEqual('token');
-      expect(requestBody).toEqual(JSON.stringify(articleObject));
-      expect(json.ok).toEqual(true);
-
-    })
-    .catch((err) => {
+  let user = await UsersAPI.login(userObject)
+  
+  let token = user.id
+  console.log(token)
+  try {
+    let json = await ArticlesAPI.addArticle(articleObject, token)
+    console.log(json)
+    expect(json.title).toEqual('test');
+  } catch(err) {
       throw new Error('Call failed');
-    });
+    };
 });

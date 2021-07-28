@@ -5,7 +5,6 @@ import ArticlesAPI from '../api/ArticlesAPI';
 class HomePage extends Component {
   state = {
     articles: [],
-
   }
 
   

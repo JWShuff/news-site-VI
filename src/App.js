@@ -11,7 +11,15 @@ import UserContext from './contexts/UserContext';
 
 class App extends Component {
   state = {
-    filterText: ''
+    filterText: '',
+    user:null,
+  }
+
+  handleLogin = (user) => {
+    this.setState({
+      user:user
+    })
+    console.log(this.state)
   }
 
   render() { 
@@ -27,6 +35,11 @@ class App extends Component {
       )
     }
     
+    const renderLoginPage = (routerProps) => {
+      return (
+        <LoginPage {...routerProps} handleLogin={this.handleLogin} />
+      )
+    }
   
     return (
       <div>
@@ -45,7 +58,7 @@ class App extends Component {
               <Route exact path='/sections/:sectionID' render={renderSectionPage} filterText={this.state.filterText} />
               <Route exact path="/articles/:articleID" component={ArticlePage} />
               <Route exact path='/add-article' component={AddArticlePage} />
-              <Route exact path='/login' component={LoginPage} />
+              <Route exact path='/login' render={renderLoginPage} />
             </div>
           </UserContext.Provider>
         </Router>

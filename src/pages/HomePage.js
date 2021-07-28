@@ -5,16 +5,13 @@ import ArticlesAPI from '../api/ArticlesAPI';
 class HomePage extends Component {
   state = {
     articles: [],
-    filterText: '',
-    searchText: ''
+
   }
 
   
   async updateArticles() {
     try {
-
-      console.log('searchtext is: ', this.state.searchText)
-      const json = await ArticlesAPI.fetchArticles(this.state.searchText);
+      const json = await ArticlesAPI.fetchArticles(this.props.filterText);
       this.setState({
         articles:json
       })
@@ -30,14 +27,9 @@ class HomePage extends Component {
   
   
   // updates based on search text
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     console.log('prevprops differ')
     if (prevProps.filterText !== this.props.filterText) {
-      this.setState({
-        searchText: (this.props.filterText)
-      })
-    }
-    if(prevState.searchText !== this.state.searchText) {
       this.updateArticles()
     }
   }

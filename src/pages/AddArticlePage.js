@@ -7,10 +7,10 @@ class AddArticlePage extends Component {
   state = {
     isSubmitted:false,
     submissionSuccess:false,
-    subMessage: ""
+    subMessage: "Please fill out the form."
     }
 
-  handleForm = async (evt) => {
+  handleForm = async (evt, userToken) => {
     evt.preventDefault();
     let articleObject = {
       'title': evt.target.title.value,
@@ -18,21 +18,28 @@ class AddArticlePage extends Component {
       'abstract': evt.target.abstract.value
     }
     this.setState({
-      isSubmitted:true,
+      subMessage: `Submitted, but not successful.`
     })
     try {
-      let article = await ArticlesAPI.addArticle(articleObject, userContext.user.id)
-          if (article.title == articleObject.title) {
-            this.setState({
-              SubmissionSuccess:true,
-              subMessage:`Article status code: ${article}`
+      let article = await ArticlesAPI.addArticle(articleObject, userToken)
+      console.log(article)
+      if (article.title) {
+        this.setState({
+              isSubmitted:true,
+              submissionSuccess: true,
+              subMessage:`Success! Article Title: ${article.title}`
             })
-          } 
-        } catch {
+          } else {
+            this.setState({
+              isSubmitted: true,
+              subMessage:`Error adding article, status text: ${article}`
+              })
+            
+          }
+        } catch (error) {
           this.setState({
-            subMessage:`Error! JSON returned: ${error}`
+            subMessage:`Error! JSON returned: ${article}`
           })
-          console.log(article)
         }
   }
 
@@ -40,34 +47,41 @@ class AddArticlePage extends Component {
   render() { 
     return ( 
       <div>
-        { this.state.isSubmitted && this.state.submissionSuccess?
-          <h4 className='bg-success text-dark'> {this.state.subMessage}</h4>
-          : !this.state.isSubmitted ? <h4 className='bg-secondary text-light'> Please fill out the form: </h4>
-          : <h4 className='bg-danger text-warning'>{this.state.subMessage}</h4>
-        }
+        <div>
+          { !this.state.isSubmitted && !this.state.submissionSuccess ? 
+          <h4 className='bg-secondary text-light'> { this.state.subMessage }</h4>
+          : <h4 className='bg-danger text-dark'>{this.state.subMessage}</h4>
+          }
+        </div>
+         {/* <h4 className='bg-success text-dark'> {this.state.subMessage}</h4> */}
         <UserContext.Consumer>
-          {userContext => (
-            <Form onSubmit={this.handleForm}>
-              <FormGroup>
-                <Label>
-                  Title:
-                </Label>
-                <Input required type='text' name='title' placeholder='Rabid puppies arise from the depths' />
-              </FormGroup>
-              <FormGroup>
-                <Label>
-                  Byline:
-                </Label>
-                <Input required type='text' name='byline' placeholder='By: Dr. So-and-so' />
-              </FormGroup>
-              <FormGroup>
-                <Label>
-                  Abstract:
-                </Label>
-                <Input required type='textarea' name='abstract' placeholder='Article Abstract Goes Here' />
-              </FormGroup>
-              <Button color='success' type='submit'>Submit Article</Button>
-            </Form>
+          {user => (
+            user.use ? (
+              <Form onSubmit={(event) => this.handleForm(event, user.use.id)}>
+                <FormGroup>
+                  <Label>
+                    Title:
+                  </Label>
+                  <Input required type='text' name='title' placeholder='Rabid puppies arise from the depths' />
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    Byline:
+                  </Label>
+                  <Input required type='text' name='byline' placeholder='By: Dr. So-and-so' />
+                </FormGroup>
+                <FormGroup>
+                  <Label>
+                    Abstract:
+                  </Label>
+                  <Input  type='textarea' name='abstract' placeholder='Article Abstract Goes Here' />
+                </FormGroup>
+                <Button color='success' type='submit'>Submit Article</Button>
+              </Form>
+            )
+            : (
+              <h4>You Must Log In!</h4>
+            )
           )}
         </UserContext.Consumer>
       </div>

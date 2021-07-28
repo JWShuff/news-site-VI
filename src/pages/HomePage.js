@@ -27,7 +27,6 @@ class HomePage extends Component {
   
   // updates based on search text
   componentDidUpdate(prevProps) {
-    console.log('prevprops differ')
     if (prevProps.filterText !== this.props.filterText) {
       this.updateArticles()
     }

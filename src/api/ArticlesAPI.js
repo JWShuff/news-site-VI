@@ -56,6 +56,7 @@ const addArticle = async (articleObject, token) => {
     return (data); 
     } catch (error) {
     console.error('Add Article failed: ', error)
+    return error
   }
 }
 

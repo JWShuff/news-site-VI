@@ -16,6 +16,7 @@ class LoginPage extends Component {
     console.log(credentials)
     let user = await UsersAPI.login(credentials)
     this.props.handleLogin(user)
+    return this.props.history.push('/')
   }
   render() {
     return ( 

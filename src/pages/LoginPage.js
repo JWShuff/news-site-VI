@@ -1,59 +1,30 @@
-import React, { Component } from 'react';
-import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Form, FormGroup, Button, Input, Label} from "reactstrap";
 
-class LoginPage extends Component {
 
-  handleFormSubmit = (event) => {
-    event.preventDefault();
-    console.log(event.target.elements[0].value);
-    console.log(event.target.elements[1].value);
-  };
+const LoginPage = () => {
 
-  render() {
-    return (
-      <div style={{padding: '20px'}}>
-        <h3> Login </h3>
-        <Form onSubmit={this.handleFormSubmit}>
-          <FormGroup>
-            <Label for="email">Email</Label>
-            <Input type="email" name="email" id="email" />
-          </FormGroup>
-          <FormGroup>
-            <Label for="password">Password</Label>
-            <Input type="password" name="password" id="password" />
-          </FormGroup>
-          <Button>Submit</Button>
-        </Form>
-      </div>
-    )
+  const handleLogin = (evt) => {
+    evt.preventDefault();
+    console.log(evt.target.email.value)
+    console.log(evt.target.password.value)
   }
+
+  return ( 
+    <div>
+      <h1 className='m-2'>Login Page!</h1>
+      <Form onSubmit={handleLogin}>
+        <FormGroup>
+          <Label>Email Address</Label>
+          <Input required name='email' placeholder='user@mail.com'></Input>
+        </FormGroup>
+        <FormGroup>
+          <Label>Password</Label>
+          <Input required name='password' type='password' placeholder='password'></Input>
+        </FormGroup>
+        <Button variant='secondary' type='submit'>Submit</Button>
+      </Form>
+    </div>
+   );
 }
-
+ 
 export default LoginPage;
-
-
-// Functional solution:
-// function LoginPage() {
-//   const handleFormSubmit = (event) => {
-//     event.preventDefault();
-//     console.log(event.target.elements[0].value);
-//     console.log(event.target.elements[1].value);
-//   };
-
-//   return (
-//     <div style={{ padding: '20px' }}>
-//       <h3> Login </h3>
-//       <Form onSubmit={handleFormSubmit}>
-//         <FormGroup>
-//           <Label for="email">Email</Label>
-//           <Input type="email" name="email" id="email" />
-//         </FormGroup>
-//         <FormGroup>
-//           <Label for="password">Password</Label>
-//           <Input type="password" name="password" id="password" />
-//         </FormGroup>
-//         <Button>Submit</Button>
-//       </Form>
-//     </div>
-//   )
-// };

@@ -1,44 +1,39 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Navbar, NavItem } from 'reactstrap';
-import navItems from '../../config/Sections.json';
 
-class AppNav extends Component {
-  render() {
-    return (
-      <Navbar color="light">
-        {navItems.map((navItem) =>
-          <NavItem>
-            <Link to={`/sections/${navItem.value}`} >
-              { navItem.label }
+import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { Button, Navbar, Nav, NavItem } from 'reactstrap';
+import navItems from '../../config/Sections.json';
+import SearchBar from '../SearchBar/SearchBar';
+
+
+const AppNav = (props) => {
+  
+  return (
+    <Navbar color="light">
+      <Nav >
+        <Link to='/'>| Home |</Link>
+      </Nav>
+      <Nav>
+        {
+          navItems.map((navItem, index) =>
+            <Link to={`/sections/${navItem.label.toLowerCase()}`} key={index}>
+              | { navItem.label } |
             </Link>
-          </NavItem>
         )}
-        <NavItem>
-          <Link to="/add-article">Add an Article</Link>
-        </NavItem>
-      </Navbar>
-    )
-  }
+      </Nav>
+        < SearchBar handleFilterText={props.handleFilterText}/>
+      <NavLink to='/add-article' >
+        <Button color='danger' className=''>
+            Add Article
+        </Button>
+      </NavLink>
+      <NavLink to='/login'>
+        <Button color='success' className='btn-success'>
+          Login
+        </Button>
+      </NavLink>
+    </Navbar>
+  )
 }
 
 export default AppNav;
-
-
-// Functional solution:
-// function AppNav() {
-//   return (
-//     <Navbar color="light">
-//       {navItems.map((navItem) =>
-//         <NavItem>
-//           <Link to={`/sections/${navItem.value}`} >
-//             {navItem.label}
-//           </Link>
-//         </NavItem>
-//       )}
-//       <NavItem>
-//         <Link to="/add-article">Add an Article</Link>
-//       </NavItem>
-//     </Navbar>
-//   );
-// }

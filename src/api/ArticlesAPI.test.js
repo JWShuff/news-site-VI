@@ -49,9 +49,15 @@ it('submits an article by calling addArticle()', () => {
     byline: 'title',
     abstract: 'adsf'
   };
-  return ArticlesAPI.addArticle(articleObject)
-  .then((json) => {
-      expect(json.message).toEqual('Article Successfully Created');
+  return ArticlesAPI.addArticle(articleObject, 'token')
+    .then((json) => {
+      console.log(json)
+      const requestBody = request._calls[0][1].body;
+      const headers = request._calls[0][1].headers;
+      expect(headers.Authorization).toEqual('token');
+      expect(requestBody).toEqual(JSON.stringify(articleObject));
+      expect(json.ok).toEqual(true);
+
     })
     .catch((err) => {
       throw new Error('Call failed');

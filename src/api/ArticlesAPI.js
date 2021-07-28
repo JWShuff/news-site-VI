@@ -41,30 +41,20 @@ const searchArticles = async(query) => {
 }
 
 
-const addArticle = async (articleObject) => {
+const addArticle = async (articleObject, token) => {
   try {
     let response = await fetch(BASE_URL, {
       headers: {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        'Authorization':token
       },
       method: 'POST',
       body: JSON.stringify(articleObject)
     })
+    if(!response.ok) throw response.statusText;
     let data = await response.json();
-    if (data.error) {
-      return {
-        'message': "there was an error saving the article.",
-        'isError': true,
-        'statusCode':200
-      }
-    } else {
-      return {
-        'message': "Article Successfully Created",
-        'isError': false,
-        'statusCode': 200
-      }
-    }
-  } catch (error) {
+    return (data); 
+    } catch (error) {
     console.error('Add Article failed: ', error)
   }
 }

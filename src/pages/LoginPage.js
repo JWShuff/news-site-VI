@@ -1,12 +1,20 @@
 import { Form, FormGroup, Button, Input, Label} from "reactstrap";
+import UsersAPI from "../api/UsersAPI";
 
 
 const LoginPage = () => {
 
-  const handleLogin = (evt) => {
+  const handleLogin = async (evt) => {
     evt.preventDefault();
-    console.log(evt.target.email.value)
-    console.log(evt.target.password.value)
+    let emailValue = (evt.target.email.value)
+    let passwordValue = (evt.target.password.value)
+    let credentials = {
+      email: emailValue,
+      password: passwordValue
+    }
+    console.log(credentials)
+    let data = await UsersAPI.login(credentials)
+    console.log(data)
   }
 
   return ( 

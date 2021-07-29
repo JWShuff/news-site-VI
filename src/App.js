@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import './App.css';
 import AppNav from './components/AppNav/AppNav.js';
 import HomePage from './pages/HomePage.js';
@@ -40,6 +40,23 @@ class App extends Component {
         <LoginPage {...routerProps} handleLogin={this.handleLogin} />
       )
     }
+
+    const renderLogout = (routerProps) => {
+      this.setState({
+        user: null
+      })
+      return routerProps.history.push('/login')
+    }
+
+    const PrivateRoute = ( { children, ...rest }) => {
+      return (
+        <Route {...rest} render={() => {
+          return this.state.user
+          ? children
+          : <Redirect to='/login' />
+        }} />
+      )
+    }
   
     return (
       <div>
@@ -57,8 +74,11 @@ class App extends Component {
               <Route exact path="/" render={renderHomePage} filterText={this.state.filterText}/>
               <Route exact path='/sections/:sectionID' render={renderSectionPage} filterText={this.state.filterText} />
               <Route exact path="/articles/:articleID" component={ArticlePage} />
-              <Route exact path='/add-article' component={AddArticlePage} />
+              <PrivateRoute exact path='/add-article'>
+                <AddArticlePage />
+              </PrivateRoute>
               <Route exact path='/login' render={renderLoginPage} />
+              <Route exact path='/logout' render={renderLogout} />
             </div>
           </UserContext.Provider>
         </Router>

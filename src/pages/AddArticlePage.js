@@ -29,6 +29,7 @@ class AddArticlePage extends Component {
               submissionSuccess: true,
               subMessage:`Success! Article Title: ${article.title}`
             })
+            return this.props.history.push(`/articles/${article.id}`)
           } else {
             this.setState({
               isSubmitted: true,
@@ -43,14 +44,13 @@ class AddArticlePage extends Component {
         }
   }
 
-
   render() { 
     return ( 
       <div>
         <div>
           { !this.state.isSubmitted && !this.state.submissionSuccess ? 
           <h4 className='bg-secondary text-light'> { this.state.subMessage }</h4>
-          : <h4 className='bg-danger text-dark'>{this.state.subMessage}</h4>
+          : <h4 className='bg-danger text-light'>{this.state.subMessage}</h4>
           }
         </div>
          {/* <h4 className='bg-success text-dark'> {this.state.subMessage}</h4> */}
@@ -80,7 +80,7 @@ class AddArticlePage extends Component {
               </Form>
             )
             : (
-              <h4>You Must Log In!</h4>
+              <h4>Login Please</h4> 
             )
           )}
         </UserContext.Consumer>
